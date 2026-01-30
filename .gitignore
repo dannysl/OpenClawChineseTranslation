@@ -52,3 +52,9 @@ scripts/extract-untranslated.mjs
 
 # 内部维护文档（仅本地保留）
 docs/MAINTENANCE.md
+
+# =====================================
+# AI 上下文记忆文档（跨会话持久化）
+# =====================================
+.context.md
+CONTEXT.local.md
