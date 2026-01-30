@@ -15,7 +15,8 @@
     ],
     "wizard": [
       "wizard/onboarding.json",
-      "wizard/security.json"
+      "wizard/security.json",
+      "wizard/finalize.json"
     ],
     "tui": [
       "tui/waiting.json",
