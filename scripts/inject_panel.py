@@ -17,7 +17,23 @@ import re
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(SCRIPT_DIR)
 PANEL_DIR = os.path.join(ROOT_DIR, 'translations', 'panel')
-BUILD_DIR = os.path.join(ROOT_DIR, 'openclaw', 'dist', 'control-ui')
+
+# 尝试多个可能的构建目录路径
+POSSIBLE_BUILD_DIRS = [
+    os.path.join(ROOT_DIR, 'openclaw', 'dist', 'control-ui'),  # 标准路径
+    os.path.join(ROOT_DIR, 'dist', 'control-ui'),              # 备选路径
+    'openclaw/dist/control-ui',                                  # 相对路径
+    'dist/control-ui',                                           # 相对路径备选
+]
+
+def find_build_dir():
+    """查找构建目录"""
+    for path in POSSIBLE_BUILD_DIRS:
+        if os.path.exists(path):
+            return path
+    return None
+
+BUILD_DIR = find_build_dir()
 
 def read_file(path):
     """读取文件内容"""
@@ -31,14 +47,24 @@ def write_file(path, content):
 
 def inject_panel():
     """注入功能面板到构建产物"""
+    global BUILD_DIR
     
     print("🦞 OpenClaw 功能面板注入")
     print("=" * 50)
     
-    # 检查目录
-    if not os.path.exists(BUILD_DIR):
-        print(f"❌ 构建目录不存在: {BUILD_DIR}")
+    # 查找构建目录
+    BUILD_DIR = find_build_dir()
+    if BUILD_DIR is None:
+        print("❌ 找不到构建目录，尝试过以下路径:")
+        for path in POSSIBLE_BUILD_DIRS:
+            abs_path = os.path.abspath(path)
+            print(f"   - {abs_path} (存在: {os.path.exists(path)})")
+        print(f"\n当前工作目录: {os.getcwd()}")
+        print(f"脚本目录: {SCRIPT_DIR}")
+        print(f"ROOT_DIR: {ROOT_DIR}")
         sys.exit(1)
+    
+    print(f"📁 构建目录: {os.path.abspath(BUILD_DIR)}")
     
     assets_dir = os.path.join(BUILD_DIR, 'assets')
     if not os.path.exists(assets_dir):
