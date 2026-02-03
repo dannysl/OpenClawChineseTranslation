@@ -109,7 +109,9 @@ jobs:
 
       - name: 发布到 npm (@latest)
         working-directory: openclaw
-        run: npm publish --access public --tag latest
+        # 使用 --ignore-scripts 跳过 prepack 脚本，因为代码已在 build job 中构建完成
+        # 否则 prepack 会触发重新构建，覆盖掉注入的功能面板
+        run: npm publish --access public --tag latest --ignore-scripts
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
@@ -203,8 +205,9 @@ jobs:
           push: true
           tags: ${{ steps.docker_meta.outputs.tags }}
           labels: ${{ steps.docker_meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          # 禁用缓存，确保每次构建都使用最新的注入文件
+          # cache-from: type=gha
+          # cache-to: type=gha,mode=max
           platforms: linux/amd64,linux/arm64
 
       - name: 设置镜像为公开

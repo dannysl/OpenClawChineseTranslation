@@ -149,7 +149,8 @@ jobs:
 
       - name: 发布到 npm (nightly 标签)
         working-directory: openclaw
-        run: npm publish --access public --tag nightly
+        # 使用 --ignore-scripts 跳过 prepack 脚本，因为代码已在 build job 中构建完成
+        run: npm publish --access public --tag nightly --ignore-scripts
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         continue-on-error: true
@@ -252,8 +253,9 @@ jobs:
           push: true
           tags: ${{ steps.docker_meta.outputs.tags }}
           labels: ${{ steps.docker_meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          # 禁用缓存，确保每次构建都使用最新的注入文件
+          # cache-from: type=gha
+          # cache-to: type=gha,mode=max
           platforms: linux/amd64,linux/arm64
         continue-on-error: true
 
