@@ -98,6 +98,15 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           registry-url: 'https://registry.npmjs.org'
 
+      - name: 安装 pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: 安装依赖
+        working-directory: openclaw
+        run: pnpm install --frozen-lockfile
+
       - name: 发布到 npm (@latest)
         working-directory: openclaw
         run: npm publish --access public --tag latest
