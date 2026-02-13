@@ -130,10 +130,12 @@ openclaw skills             # 管理技能
 openclaw --help             # 查看帮助
 
 # 网关管理
-openclaw gateway run        # 启动网关
+openclaw gateway run        # 前台运行（挂终端，用于调试）
+openclaw gateway start     # 后台守护进程（不挂终端，推荐！）
 openclaw gateway stop       # 停止网关
-openclaw gateway restart   # 重启网关（停止后启动）
+openclaw gateway restart   # 重启网关
 openclaw gateway status    # 查看网关状态
+openclaw gateway install   # 安装为系统服务（开机自启）
 
 # 常用操作
 openclaw update            # 检查并更新 CLI
@@ -150,13 +152,16 @@ openclaw gateway restart
 
 # 方式 2：先停止再启动
 openclaw gateway stop
-openclaw gateway run
+openclaw gateway start
+
+# 方式 3：守护进程模式（后台运行，不挂终端）
+openclaw daemon start       # 启动后台守护
+openclaw daemon stop        # 停止守护
+openclaw daemon restart    # 重启守护
+openclaw daemon status     # 查看状态
 
 # Docker 容器重启
 docker restart openclaw
-
-# 守护进程模式重启
-openclaw daemon restart
 ```
 
 ---
